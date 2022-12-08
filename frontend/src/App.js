@@ -1,26 +1,32 @@
-import { Outlet, Link } from 'react-router-dom';
-import './App.css';
+import { Outlet, NavLink } from 'react-router-dom';
+import './App.scss';
+import logo from './homebase-logo.png';
 
 function App() {
   return (
-    <div>
+    <section className="main">
       <header>
-        <h3>HOMEBASE</h3>
-        <nav>
-          <ul>
-            <li>
-              <Link to="teams">Teams</Link>
+        <nav className="navbar">
+          <img src={logo} alt="home-logo" />
+
+          <ul className="nav nav-pills">
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => `p-2 rounded-0 ${isActive ? 'active' : ''}`} to="teams">
+                Teams
+              </NavLink>
             </li>
-            <li>
-              <Link to="leaderboards">Leaderboards</Link>
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => `p-2 rounded-0 ${isActive ? 'active' : ''}`} to="leaderboards">
+                Leaderboards
+              </NavLink>
             </li>
           </ul>
         </nav>
       </header>
-      <div>
+      <section className="content">
         <Outlet />
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
 

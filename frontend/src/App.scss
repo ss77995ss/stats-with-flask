@@ -1,0 +1,31 @@
+@import './_variables.scss';
+
+header {
+  background-color: $nav;
+
+  img {
+    height: 36px;
+  }
+
+  .nav-item a {
+    color: $offset;
+    text-decoration: none;
+  }
+
+  a.active {
+    border-top: 4px solid $offset;
+    font-weight: bold;
+  }
+
+  .navbar {
+    max-width: 1200px;
+    margin: auto;
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+}
+
+

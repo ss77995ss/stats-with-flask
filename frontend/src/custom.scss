@@ -1,0 +1,19 @@
+@import './_variables.scss';
+
+$body-bg: $primary;
+$body-color: $offset;
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "danger": $danger
+);
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@import '~bootstrap/scss/bootstrap.scss';
