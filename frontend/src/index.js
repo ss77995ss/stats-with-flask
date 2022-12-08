@@ -6,6 +6,7 @@ import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';
 import reportWebVitals from './reportWebVitals';
+import { teamsLoader } from './loaders';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       {
         path: 'teams',
         element: <Teams />,
+        loader: teamsLoader,
       },
       {
         path: 'leaderboards',

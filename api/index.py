@@ -68,6 +68,11 @@ def standings():
         "205": "NL Central"
     }
 
+    response = urllib.request.urlopen(f"{api_domain}/api/v1/teams?sportId=1")
+    data = response.read()
+    dict = json.loads(data)
+    teams = dict["teams"]
+
     response = urllib.request.urlopen(
         f"{api_domain}/api/v1/standings?leagueId=103,104")
     data = response.read()
@@ -82,7 +87,7 @@ def standings():
         for team in record["teamRecords"]:
             division_team_records.append({
                 "id": team["team"]["id"],
-                "name": team["team"]["name"],
+                "name": list(filter(lambda x: x["id"] == team["team"]["id"], teams))[0]["abbreviation"],
                 "wins": team["wins"],
                 "losses": team["losses"],
                 "winningPercentage": team["winningPercentage"],
