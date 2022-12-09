@@ -1,8 +1,9 @@
 from flask import Flask
 import urllib.request
+import xmltodict
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 api_domain = "https://statsapi.mlb.com"
 
 
@@ -141,3 +142,13 @@ def leaderboard(category):
     leaders = dict["leagueLeaders"]
 
     return leaders
+
+
+@app.route("/api/news")
+def news():
+    with open("rss.xml") as xml_file:
+        data_dict = xmltodict.parse(xml_file.read())
+
+    news = data_dict["rss"]["channel"]["item"][0:4]
+
+    return news

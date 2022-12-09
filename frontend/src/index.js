@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './custom.scss';
 import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';
 import reportWebVitals from './reportWebVitals';
 import { teamsLoader } from './loaders';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -29,7 +32,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 );
 
