@@ -1,13 +1,16 @@
-.list-group-item {
-  border: none;
+.standing {
+  .list-group-item {
+    border: none;
 
-  &:nth-child(even) {
-    background-color: rgba(0,0,0,.05);
+    &:nth-child(even) {
+      background-color: rgba(0,0,0,.05);
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: .5rem;
+    }
   }
 
-  img {
-    width: 20px;
-    height: 20px;
-    margin-right: .5rem;
-  }
 }

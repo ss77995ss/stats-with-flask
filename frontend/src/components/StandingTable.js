@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
 import './standing.scss';
 
 export default function StandingTable({ division, standing }) {
   const sortedStanding = standing.sort((a, b) => parseInt(a.divisionRank, 10) - parseInt(b.divisionRank, 10));
 
   return (
-    <div className="card text-black bg-secondary mb-4">
+    <div className="standing card text-black bg-secondary mb-4">
       <div style={{ fontWeight: 'bold', borderBottom: 'none' }} className="card-header text-white row row-cols-8">
         <div className="col-3">{division}</div>
         <div className="col text-center">W</div>
@@ -20,8 +21,10 @@ export default function StandingTable({ division, standing }) {
           <li key={`standing-stats-${stat.id}`} className="list-group-item">
             <div className="row row-cols-8">
               <div className="col-3">
-                <img src={`https://www.mlbstatic.com/team-logos/${stat.id}.svg`} alt={`${stat.name}-logo`} />
-                {stat.name}
+                <Link to={`/teams/${stat.id}`}>
+                  <img src={`https://www.mlbstatic.com/team-logos/${stat.id}.svg`} alt={`${stat.name}-logo`} />
+                  {stat.name}
+                </Link>
               </div>
               <div className="col text-center">{stat.wins}</div>
               <div className="col text-center">{stat.losses}</div>

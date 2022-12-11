@@ -1,0 +1,50 @@
+.team-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &-content {
+    display: flex;
+    align-items: center;
+
+    &-img {
+      width: 4rem;
+      height: 4rem;
+      background-color: white;
+      border-radius: 50%;
+      margin-right: .5rem;
+
+      img {
+        width: 3rem;
+        height: 3rem;
+        margin: .5rem;
+      }
+    }
+  }
+
+  &-toggle-buttons {
+    border-radius: 1rem;
+    border: 4px solid white;
+    background-color: white;
+
+    button {
+      border: none;
+      border-radius: 1rem;
+      background-color: white;
+      transition: all .5s ease-in-out;
+    }
+
+    .active {
+      background-color: blue;
+      color: white;
+    }
+  }
+
+  &-hitters {
+    img {
+      height: 30px;
+      width: 30px;
+      margin-right: .5rem;
+    }
+  }
+}

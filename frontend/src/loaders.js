@@ -3,3 +3,9 @@ export async function teamsLoader() {
 
   return { standings };
 }
+
+export async function teamInfoLoader({ params }) {
+  const teamInfo = await fetch(`/api/rosters/${params.teamId}`).then((res) => res.json());
+
+  return { teamInfo };
+}

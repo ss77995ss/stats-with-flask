@@ -6,6 +6,15 @@ import json
 app = Flask(__name__, static_folder='static', static_url_path='')
 api_domain = "https://statsapi.mlb.com"
 
+division_map = {
+    "200": "AL West",
+    "201": "AL East",
+    "202": "AL Central",
+    "203": "NL West",
+    "204": "NL East",
+    "205": "NL Central"
+}
+
 
 @app.route("/api/")
 def home():
@@ -34,6 +43,22 @@ def teams():
 @app.route("/api/rosters/<team_id>")
 def rosters(team_id):
     response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/teams/{team_id}")
+    data = response.read()
+    dict = json.loads(data)
+    team = dict["teams"][0]
+
+    response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/standings?leagueId=103,104")
+    data = response.read()
+    dict = json.loads(data)
+    records = dict["records"]
+    division_records = list(
+        filter(lambda x: x["division"]["id"] == team["division"]["id"], records))
+    team_record = list(
+        filter(lambda x: x["team"]["id"] == team["id"], division_records[0]["teamRecords"]))[0]
+
+    response = urllib.request.urlopen(
         f"{api_domain}/api/v1/teams/{team_id}/roster/Active?hydrate=person(stats(type=season))")
     data = response.read()
     dict = json.loads(data)
@@ -45,6 +70,7 @@ def rosters(team_id):
         try:
             new_rosters.append({
                 "id": roster["person"]["id"],
+                "age": roster["person"]["currentAge"],
                 "jerseyNumber": roster["jerseyNumber"],
                 "batSide": roster["person"]["batSide"]["code"],
                 "pitchHand": roster["person"]["pitchHand"]["code"],
@@ -53,22 +79,23 @@ def rosters(team_id):
                 "stat": roster["person"]["stats"][0]["splits"][0]["stat"]
             })
         except:
-            print(roster["person"]["id"])
+            print(roster["person"]["fullName"])
 
-    return new_rosters
+    return {
+        "id": team["id"],
+        "name": team["name"],
+        "division": division_map[str(team["division"]["id"])],
+        "wins": team_record["wins"],
+        "losses": team_record["losses"],
+        "winningPercentage": team_record["winningPercentage"],
+        "divisionGamesBack": team_record["divisionGamesBack"],
+        "divisionRank": team_record["divisionRank"],
+        "rosters": new_rosters
+    }
 
 
 @app.route("/api/standings")
 def standings():
-    division_map = {
-        "200": "AL West",
-        "201": "AL East",
-        "202": "AL Central",
-        "203": "NL West",
-        "204": "NL East",
-        "205": "NL Central"
-    }
-
     response = urllib.request.urlopen(f"{api_domain}/api/v1/teams?sportId=1")
     data = response.read()
     dict = json.loads(data)
