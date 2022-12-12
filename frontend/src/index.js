@@ -7,8 +7,9 @@ import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';
 import reportWebVitals from './reportWebVitals';
-import { teamsLoader, teamInfoLoader } from './loaders';
+import { teamsLoader, teamInfoLoader, playerInfoLoader } from './loaders';
 import TeamInfo from './routes/TeamInfo';
+import PlayerInfo from './routes/PlayerInfo';
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
         path: 'teams/:teamId',
         element: <TeamInfo />,
         loader: teamInfoLoader,
+      },
+      {
+        path: 'teams/:teamId/player/:playerId',
+        element: <PlayerInfo />,
+        loader: playerInfoLoader,
       },
     ],
   },

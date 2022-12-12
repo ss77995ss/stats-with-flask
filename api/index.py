@@ -21,23 +21,21 @@ def home():
     return "Hello World!"
 
 
-@app.route("/api/teams")
-def teams():
-    response = urllib.request.urlopen(f"{api_domain}/api/v1/teams?sportId=1")
+@app.route("/api/team/<team_id>")
+def team(team_id):
+    response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/teams/{team_id}?sportId=1")
     data = response.read()
     dict = json.loads(data)
-    teams = dict["teams"]
-    new_teams = []
+    team = dict["teams"][0]
 
-    for team in teams:
-        new_teams.append({
-            "id": team["id"],
-            "abbreviation": team["abbreviation"],
-            "league": team["league"]["name"],
-            "division": team["division"]["name"]
-        })
-
-    return new_teams
+    return {
+        "id": team["id"],
+        "name": team["name"],
+        "abbreviation": team["abbreviation"],
+        "league": team["league"]["name"],
+        "division": team["division"]["name"]
+    }
 
 
 @app.route("/api/rosters/<team_id>")
@@ -78,8 +76,9 @@ def rosters(team_id):
                 "position": roster["position"]["abbreviation"],
                 "stat": roster["person"]["stats"][0]["splits"][0]["stat"]
             })
-        except:
-            print(roster["person"]["fullName"])
+        except Exception as e:
+            print(roster["person"]["id"], roster["person"]["fullName"])
+            print(repr(e))
 
     return {
         "id": team["id"],
@@ -153,7 +152,7 @@ def player(player_id):
         "primaryPosition": player["primaryPosition"]["abbreviation"],
         "height": player["height"],
         "weight": player["weight"],
-        "draftYear": player["draftYear"],
+        "draftYear": player["draftYear"] if "draftYear" in player else "N/A",
         "stats": new_stats
     }
 

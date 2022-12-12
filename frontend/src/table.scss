@@ -1,0 +1,55 @@
+@import './_variables.scss';
+
+.stats-table {
+  width: 100%;
+
+  th {
+    width: 3.5rem;
+    &:first-child {
+      border-top-left-radius: .5rem;
+    }
+
+    &:nth-child(2) {
+      width: auto;
+      text-align: left;
+    }
+
+    &:last-child {
+      border-top-right-radius: .5rem;
+    }
+  }
+
+  tbody {
+    color: black;
+    background-color: white;
+
+    tr {
+      &:nth-child(even) {
+        background-color: rgba(0,0,0,.05)
+      }
+
+      td {
+        &:nth-child(2) {
+          text-align: left;
+          img {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: .5rem;
+          }
+        }
+      }
+
+      &:last-child {
+        td {
+          &:first-child {
+            border-bottom-left-radius: .5rem;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: .5rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ const RANK_MAP = {
 
 export default function TeamInfo() {
   const { teamInfo } = useLoaderData();
-  const [playerType, setPlayerType] = useState('Pitchers');
+  const [playerType, setPlayerType] = useState('Hitters');
 
   const handleToggle = (e) => setPlayerType(e.target.value);
 
@@ -41,9 +41,13 @@ export default function TeamInfo() {
         </div>
       </div>
       {playerType === 'Hitters' ? (
-        <Hitters hitters={teamInfo.rosters.filter((roster) => roster.position !== 'P' && roster.position !== 'TWP')} />
+        <Hitters
+          teamId={teamInfo.id}
+          hitters={teamInfo.rosters.filter((roster) => roster.position !== 'P' && roster.position !== 'TWP')}
+        />
       ) : (
         <Pitchers
+          teamId={teamInfo.id}
           pitchers={teamInfo.rosters.filter((roster) => roster.position === 'P' || roster.position === 'TWP')}
         />
       )}
@@ -51,7 +55,7 @@ export default function TeamInfo() {
   );
 }
 
-function Hitters({ hitters }) {
+function Hitters({ teamId, hitters }) {
   return (
     <div className="team-info-hitters card text-black bg-secondary mb-4">
       <div style={{ fontWeight: 'bold', borderBottom: 'none' }} className="card-header text-white row row-cols-17">
@@ -80,10 +84,10 @@ function Hitters({ hitters }) {
               <div className="col text-center">{stat.position}</div>
               <div className="col text-center">{stat.jerseyNumber}</div>
               <div className="col-3">
-                <Link to={`/teams/${stat.id}`}>
+                <Link to={`/teams/${teamId}/player/${stat.id}`}>
                   <img
                     src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
-                    alt={`${stat.fullName}-logo`}
+                    alt={`${stat.fullName}-headshot`}
                   />
                   {stat.fullName}
                 </Link>
@@ -118,7 +122,7 @@ function Hitters({ hitters }) {
   );
 }
 
-function Pitchers({ pitchers }) {
+function Pitchers({ teamId, pitchers }) {
   return (
     <div className="team-info-hitters card text-black bg-secondary mb-4">
       <div style={{ fontWeight: 'bold', borderBottom: 'none' }} className="card-header text-white row row-cols-13">
@@ -143,7 +147,7 @@ function Pitchers({ pitchers }) {
               <div className="col text-center">{stat.position}</div>
               <div className="col text-center">{stat.jerseyNumber}</div>
               <div className="col-3">
-                <Link to={`/teams/${stat.id}`}>
+                <Link to={`/teams/${teamId}/player/${stat.id}`}>
                   <img
                     src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
                     alt={`${stat.fullName}-logo`}

@@ -9,3 +9,10 @@ export async function teamInfoLoader({ params }) {
 
   return { teamInfo };
 }
+
+export async function playerInfoLoader({ params }) {
+  const teamInfo = await fetch(`/api/team/${params.teamId}`).then((res) => res.json());
+  const playerInfo = await fetch(`/api/player/${params.playerId}`).then((res) => res.json());
+
+  return { teamInfo, playerInfo };
+}
