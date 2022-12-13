@@ -7,7 +7,7 @@ import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';
 import reportWebVitals from './reportWebVitals';
-import { teamsLoader, teamInfoLoader, playerInfoLoader } from './loaders';
+import { leaderboardLoader, teamsLoader, teamInfoLoader, playerInfoLoader } from './loaders';
 import TeamInfo from './routes/TeamInfo';
 import PlayerInfo from './routes/PlayerInfo';
 
@@ -26,6 +26,7 @@ const router = createBrowserRouter([
       {
         path: 'leaderboards',
         element: <Leaderboards />,
+        loader: leaderboardLoader,
       },
       {
         path: 'teams/:teamId',

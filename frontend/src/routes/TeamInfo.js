@@ -87,6 +87,7 @@ function Hitters({ teamId, hitters }) {
                 <Link to={`/teams/${teamId}/player/${stat.id}`}>
                   <img
                     src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
+                    srcSet={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}@2x.png 2x, https://content.mlb.com/images/headshots/current/60x60/${stat.id}@4x.png 4x`}
                     alt={`${stat.fullName}-headshot`}
                   />
                   {stat.fullName}

@@ -159,15 +159,28 @@ def player(player_id):
     return new_player
 
 
-@app.route("/api/leaderboard/<category>")
-def leaderboard(category):
+@app.route("/api/leaderboard/hitting/<category>")
+def hitting_leaderboard(category):
     response = urllib.request.urlopen(
         f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
     data = response.read()
     dict = json.loads(data)
-    leaders = dict["leagueLeaders"]
+    leaders = list(filter(lambda x: x["statGroup"] ==
+                          "hitting", dict["leagueLeaders"]))
 
-    return leaders
+    return leaders[0]["leaders"][0:5]
+
+
+@app.route("/api/leaderboard/pitching/<category>")
+def pitching_leaderboard(category):
+    response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
+    data = response.read()
+    dict = json.loads(data)
+    leaders = list(filter(lambda x: x["statGroup"] ==
+                          "pitching", dict["leagueLeaders"]))
+
+    return leaders[0]["leaders"][0:5]
 
 
 @app.route("/api/news")
