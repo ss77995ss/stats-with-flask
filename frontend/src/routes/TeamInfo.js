@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import './TeamInfo.scss';
+import '../styles/components/TeamInfo.scss';
 
 const RANK_MAP = {
   1: '1st',

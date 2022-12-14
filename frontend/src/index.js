@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import './custom.scss';
+import './styles/custom.scss';
 import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';

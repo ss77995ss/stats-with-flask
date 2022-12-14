@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import './standing.scss';
+import '../styles/components/Standing.scss';
 
 export default function StandingTable({ division, standing }) {
   const sortedStanding = standing.sort((a, b) => parseInt(a.divisionRank, 10) - parseInt(b.divisionRank, 10));

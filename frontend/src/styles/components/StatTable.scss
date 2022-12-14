@@ -1,4 +1,4 @@
-@import './_variables.scss';
+@use "../variables";
 
 .stats-table {
   width: 100%;
@@ -21,7 +21,7 @@
 
   tbody {
     color: black;
-    background-color: white;
+    background-color: variables.$offset;
 
     tr {
       &:nth-child(even) {

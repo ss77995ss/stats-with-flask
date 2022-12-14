@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import '../table.scss';
+import '../styles/components/StatTable.scss';
 
 function InfoItem({ labelText, description }) {
   return (
