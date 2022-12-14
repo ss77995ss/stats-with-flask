@@ -1,47 +1,36 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import '../styles/components/StatTable.scss';
-
-function InfoItem({ labelText, description }) {
-  return (
-    <div className="m-2">
-      <label className="text-secondary" style={{ fontSize: '.75rem' }}>
-        {labelText}
-      </label>
-      <p>{description}</p>
-    </div>
-  );
-}
+import BioStat from '../components/BioStat';
 
 export default function PlayerInfo() {
   const { playerInfo, teamInfo } = useLoaderData();
 
   return (
     <div>
-      <div className="team-info">
-        <div className="team-info-content">
-          <div className="player-info-content-img">
+      <div className="info">
+        <div className="info-content">
+          <div className="info-content-player-img">
             <img
               src={`https://content.mlb.com/images/headshots/current/60x60/${playerInfo.id}.png`}
               srcSet={`https://content.mlb.com/images/headshots/current/60x60/${playerInfo.id}@2x.png 2x, https://content.mlb.com/images/headshots/current/60x60/${playerInfo.id}@4x.png 4x`}
               alt={`${playerInfo.fullName}-headshot`}
             />
           </div>
-          <div className="team-info-content-detail">
+          <div className="info-content-detail">
             <h3>{playerInfo.fullName}</h3>
-            <span className="team-info-content-detail-rank text-secondary">{playerInfo.primaryPosition}</span>
+            <span className="info-content-detail-rank text-secondary">{playerInfo.primaryPosition}</span>
             <Link to={`/teams/${teamInfo.id}`}>
-              <span style={{ color: 'white' }} className="team-info-content-detail-record m-2">
+              <span style={{ color: 'white' }} className="info-content-detail-record m-2">
                 {teamInfo.name}
               </span>
             </Link>
           </div>
         </div>
-        <div style={{ display: 'flex' }}>
-          <InfoItem labelText="B/T" description={`${`${playerInfo.batSide}/${playerInfo.pitchHand}`}`} />
-          <InfoItem labelText="Age" description={playerInfo.age} />
-          <InfoItem labelText="H" description={playerInfo.height} />
-          <InfoItem labelText="W" description={playerInfo.weight} />
-          <InfoItem labelText="Drafted" description={playerInfo.draftYear} />
+        <div className="info-bio-stats">
+          <BioStat labelText="B/T" description={`${`${playerInfo.batSide}/${playerInfo.pitchHand}`}`} />
+          <BioStat labelText="Age" description={playerInfo.age} />
+          <BioStat labelText="H" description={playerInfo.height} />
+          <BioStat labelText="W" description={playerInfo.weight} />
+          <BioStat labelText="Drafted" description={playerInfo.draftYear} />
         </div>
       </div>
       <div>
@@ -61,7 +50,7 @@ function Hitters({ playerInfo }) {
       <thead>
         <tr className="bg-secondary text-center">
           <th>Year</th>
-          <th>Team</th>
+          <th className="lg-cell">Team</th>
           <th>G</th>
           <th>PA</th>
           <th>AB</th>
@@ -84,7 +73,7 @@ function Hitters({ playerInfo }) {
             {stat.team && (
               <>
                 <td>{stat.season}</td>
-                <td>
+                <td className="lg-cell">
                   <Link to={`/teams/${stat.team.id}`}>
                     <img
                       className="ml-2"
@@ -123,7 +112,7 @@ function Pitchers({ playerInfo }) {
       <thead>
         <tr className="bg-secondary text-center">
           <th>Year</th>
-          <th>Team</th>
+          <th className="lg-cell">Team</th>
           <th>G</th>
           <th>IP</th>
           <th>W</th>
@@ -145,7 +134,7 @@ function Pitchers({ playerInfo }) {
             {stat.team && (
               <>
                 <td>{stat.season}</td>
-                <td>
+                <td className="lg-cell">
                   <Link to={`/teams/${stat.team.id}`}>
                     <img
                       className="ml-2"

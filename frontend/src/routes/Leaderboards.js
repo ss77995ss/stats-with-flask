@@ -1,4 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom';
+import '../styles/components/StatTable.scss';
 
 const STAT_LABEL_MAP = {
   AVG: 'BATTING AVERAGE',
@@ -23,7 +24,7 @@ function LeadersTable({ statName, leaders }) {
         <thead>
           <tr className="bg-secondary text-center">
             <th>#</th>
-            <th>Player</th>
+            <th className="lg-cell">Player</th>
             <th>{statName}</th>
           </tr>
         </thead>
@@ -31,7 +32,7 @@ function LeadersTable({ statName, leaders }) {
           {leaders.map((leader) => (
             <tr className="text-center">
               <td>{leader.rank}</td>
-              <td>
+              <td className="lg-cell">
                 <Link to={`/teams/${leader.team.id}/player/${leader.person.id}`}>
                   <img
                     src={`https://content.mlb.com/images/headshots/current/60x60/${leader.person.id}.png`}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import '../styles/components/TeamInfo.scss';
+import '../styles/components/Info.scss';
 
 const RANK_MAP = {
   1: '1st',
@@ -18,20 +18,20 @@ export default function TeamInfo() {
 
   return (
     <div>
-      <div className="team-info">
-        <div className="team-info-content">
-          <div className="team-info-content-img">
+      <div className="info">
+        <div className="info-content">
+          <div className="info-content-team-img mr-2">
             <img src={`https://www.mlbstatic.com/team-logos/${teamInfo.id}.svg`} alt="team-info-img" />
           </div>
-          <div className="team-info-content-detail">
+          <div className="info-content-detail">
             <h3>{teamInfo.name}</h3>
-            <span className="team-info-content-detail-rank text-secondary">{`${RANK_MAP[teamInfo.divisionRank]} in ${
+            <span className="info-content-detail-rank text-secondary">{`${RANK_MAP[teamInfo.divisionRank]} in ${
               teamInfo.division
             }`}</span>
-            <span className="team-info-content-detail-record m-2">{`${teamInfo.wins} - ${teamInfo.losses} (${teamInfo.winningPercentage}) • ${teamInfo.divisionGamesBack} GB`}</span>
+            <span className="info-content-detail-record m-2">{`${teamInfo.wins} - ${teamInfo.losses} (${teamInfo.winningPercentage}) • ${teamInfo.divisionGamesBack} GB`}</span>
           </div>
         </div>
-        <div className="team-info-toggle-buttons">
+        <div className="info-toggle-buttons">
           <button value="Hitters" className={`${playerType === 'Hitters' && 'active'}`} onClick={handleToggle}>
             Hitters
           </button>
@@ -57,127 +57,127 @@ export default function TeamInfo() {
 
 function Hitters({ teamId, hitters }) {
   return (
-    <div className="team-info-hitters card text-black bg-secondary mb-4">
-      <div style={{ fontWeight: 'bold', borderBottom: 'none' }} className="card-header text-white row row-cols-17">
-        <div className="col text-center">Pos</div>
-        <div className="col text-center">#</div>
-        <div className="col-3">Player</div>
-        <div className="col text-center">Age</div>
-        <div className="col text-center">B</div>
-        <div className="col text-center">T</div>
-        <div className="col text-center">PA</div>
-        <div className="col text-center">H</div>
-        <div className="col text-center">2B</div>
-        <div className="col text-center">3B</div>
-        <div className="col text-center">HR</div>
-        <div className="col text-center">SB</div>
-        <div className="col text-center">SO%</div>
-        <div className="col text-center">BB%</div>
-        <div className="col text-center">AVG</div>
-        <div className="col text-center">OBP</div>
-        <div className="col text-center">OPS</div>
-      </div>
-      <ul className="list-group list-group-flush bg-white">
+    <table className="stats-table mb-4">
+      <thead>
+        <tr className="bg-secondary text-center">
+          <th>Pos</th>
+          <th>#</th>
+          <th className="lg-cell">Player</th>
+          <th>Age</th>
+          <th>B</th>
+          <th>T</th>
+          <th>PA</th>
+          <th>H</th>
+          <th>2B</th>
+          <th>3B</th>
+          <th>HR</th>
+          <th>SB</th>
+          <th>SO%</th>
+          <th>BB%</th>
+          <th>AVG</th>
+          <th>OBP</th>
+          <th>OPS</th>
+        </tr>
+      </thead>
+      <tbody>
         {hitters.map((stat) => (
-          <li key={`standing-stats-${stat.id}`} className="list-group-item">
-            <div className="row row-cols-17">
-              <div className="col text-center">{stat.position}</div>
-              <div className="col text-center">{stat.jerseyNumber}</div>
-              <div className="col-3">
-                <Link to={`/teams/${teamId}/player/${stat.id}`}>
-                  <img
-                    src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
-                    srcSet={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}@2x.png 2x, https://content.mlb.com/images/headshots/current/60x60/${stat.id}@4x.png 4x`}
-                    alt={`${stat.fullName}-headshot`}
-                  />
-                  {stat.fullName}
-                </Link>
-              </div>
-              <div className="col text-center">{stat.age}</div>
-              <div className="col text-center">{stat.batSide}</div>
-              <div className="col text-center">{stat.pitchHand}</div>
-              <div className="col text-center">{stat.stat.plateAppearances}</div>
-              <div className="col text-center">{stat.stat.hits}</div>
-              <div className="col text-center">{stat.stat.doubles}</div>
-              <div className="col text-center">{stat.stat.triples}</div>
-              <div className="col text-center">{stat.stat.homeRuns}</div>
-              <div className="col text-center">{stat.stat.stolenBases}</div>
-              <div className="col text-center">
-                {stat.stat.plateAppearances > 0
-                  ? (stat.stat.strikeOuts / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
-                  : '.000'}
-              </div>
-              <div className="col text-center">
-                {stat.stat.plateAppearances > 0
-                  ? (stat.stat.baseOnBalls / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
-                  : '.000'}
-              </div>
-              <div className="col text-center">{stat.stat.avg}</div>
-              <div className="col text-center">{stat.stat.obp}</div>
-              <div className="col text-center">{stat.stat.ops}</div>
-            </div>
-          </li>
+          <tr className="text-center" key={`standing-stats-${stat.id}`}>
+            <td>{stat.position}</td>
+            <td>{stat.jerseyNumber}</td>
+            <td className="lg-cell">
+              <Link to={`/teams/${teamId}/player/${stat.id}`}>
+                <img
+                  src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
+                  srcSet={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}@2x.png 2x, https://content.mlb.com/images/headshots/current/60x60/${stat.id}@4x.png 4x`}
+                  alt={`${stat.fullName}-headshot`}
+                />
+                {stat.fullName}
+              </Link>
+            </td>
+            <td>{stat.age}</td>
+            <td>{stat.batSide}</td>
+            <td>{stat.pitchHand}</td>
+            <td>{stat.stat.plateAppearances}</td>
+            <td>{stat.stat.hits}</td>
+            <td>{stat.stat.doubles}</td>
+            <td>{stat.stat.triples}</td>
+            <td>{stat.stat.homeRuns}</td>
+            <td>{stat.stat.stolenBases}</td>
+            <td>
+              {stat.stat.plateAppearances > 0
+                ? (stat.stat.strikeOuts / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
+                : '.000'}
+            </td>
+            <td>
+              {stat.stat.plateAppearances > 0
+                ? (stat.stat.baseOnBalls / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
+                : '.000'}
+            </td>
+            <td>{stat.stat.avg}</td>
+            <td>{stat.stat.obp}</td>
+            <td>{stat.stat.ops}</td>
+          </tr>
         ))}
-      </ul>
-    </div>
+      </tbody>
+    </table>
   );
 }
 
 function Pitchers({ teamId, pitchers }) {
   return (
-    <div className="team-info-hitters card text-black bg-secondary mb-4">
-      <div style={{ fontWeight: 'bold', borderBottom: 'none' }} className="card-header text-white row row-cols-13">
-        <div className="col text-center">Pos</div>
-        <div className="col text-center">#</div>
-        <div className="col-3">Player</div>
-        <div className="col text-center">Age</div>
-        <div className="col text-center">T</div>
-        <div className="col text-center">IP</div>
-        <div className="col text-center">ERA</div>
-        <div className="col text-center">SO</div>
-        <div className="col text-center">BB</div>
-        <div className="col text-center">SO%</div>
-        <div className="col text-center">BB%</div>
-        <div className="col text-center">HR/9</div>
-        <div className="col text-center">OPS</div>
-      </div>
-      <ul className="list-group list-group-flush bg-white">
+    <table className="stats-table mb-4">
+      <thead>
+        <tr className="bg-secondary text-center">
+          <th>Pos</th>
+          <th>#</th>
+          <th className="lg-cell">Player</th>
+          <th>Age</th>
+          <th>T</th>
+          <th>IP</th>
+          <th>ERA</th>
+          <th>SO</th>
+          <th>BB</th>
+          <th>SO%</th>
+          <th>BB%</th>
+          <th>HR/9</th>
+          <th>OPS</th>
+        </tr>
+      </thead>
+      <tbody>
         {pitchers.map((stat) => (
-          <li key={`standing-stats-${stat.id}`} className="list-group-item">
-            <div className="row row-cols-13">
-              <div className="col text-center">{stat.position}</div>
-              <div className="col text-center">{stat.jerseyNumber}</div>
-              <div className="col-3">
-                <Link to={`/teams/${teamId}/player/${stat.id}`}>
-                  <img
-                    src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
-                    alt={`${stat.fullName}-logo`}
-                  />
-                  {stat.fullName}
-                </Link>
-              </div>
-              <div className="col text-center">{stat.age}</div>
-              <div className="col text-center">{stat.pitchHand}</div>
-              <div className="col text-center">{stat.stat.inningsPitched}</div>
-              <div className="col text-center">{stat.stat.era}</div>
-              <div className="col text-center">{stat.stat.strikeOuts}</div>
-              <div className="col text-center">{stat.stat.baseOnBalls}</div>
-              <div className="col text-center">
-                {stat.stat.battersFaced > 0
-                  ? (stat.stat.strikeOuts / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
-                  : '.000'}
-              </div>
-              <div className="col text-center">
-                {stat.stat.battersFaced > 0
-                  ? (stat.stat.baseOnBalls / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
-                  : '.000'}
-              </div>
-              <div className="col text-center">{stat.stat.homeRunsPer9}</div>
-              <div className="col text-center">{stat.stat.ops}</div>
-            </div>
-          </li>
+          <tr key={`standing-stats-${stat.id}`} className="text-center">
+            <td>{stat.position}</td>
+            <td>{stat.jerseyNumber}</td>
+            <td className="lg-cell">
+              <Link to={`/teams/${teamId}/player/${stat.id}`}>
+                <img
+                  src={`https://content.mlb.com/images/headshots/current/60x60/${stat.id}.png`}
+                  alt={`${stat.fullName}-logo`}
+                />
+                {stat.fullName}
+              </Link>
+            </td>
+            <td>{stat.age}</td>
+            <td>{stat.pitchHand}</td>
+            <td>{stat.stat.inningsPitched}</td>
+            <td>{stat.stat.era}</td>
+            <td>{stat.stat.strikeOuts}</td>
+            <td>{stat.stat.baseOnBalls}</td>
+            <td>
+              {stat.stat.battersFaced > 0
+                ? (stat.stat.strikeOuts / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
+                : '.000'}
+            </td>
+            <td>
+              {stat.stat.battersFaced > 0
+                ? (stat.stat.baseOnBalls / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
+                : '.000'}
+            </td>
+            <td>{stat.stat.homeRunsPer9}</td>
+            <td>{stat.stat.ops}</td>
+          </tr>
         ))}
-      </ul>
-    </div>
+      </tbody>
+    </table>
   );
 }
