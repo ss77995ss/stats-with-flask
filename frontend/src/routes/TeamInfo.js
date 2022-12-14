@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
+import { Table, TableHeader, TableBody } from '../components/StatsTable';
 import '../styles/components/Info.scss';
 
 const RANK_MAP = {
@@ -57,29 +58,27 @@ export default function TeamInfo() {
 
 function Hitters({ teamId, hitters }) {
   return (
-    <table className="stats-table mb-4">
-      <thead>
-        <tr className="bg-secondary text-center">
-          <th>Pos</th>
-          <th>#</th>
-          <th className="lg-cell">Player</th>
-          <th>Age</th>
-          <th>B</th>
-          <th>T</th>
-          <th>PA</th>
-          <th>H</th>
-          <th>2B</th>
-          <th>3B</th>
-          <th>HR</th>
-          <th>SB</th>
-          <th>SO%</th>
-          <th>BB%</th>
-          <th>AVG</th>
-          <th>OBP</th>
-          <th>OPS</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHeader>
+        <th>Pos</th>
+        <th>#</th>
+        <th className="lg-cell">Player</th>
+        <th>Age</th>
+        <th>B</th>
+        <th>T</th>
+        <th>PA</th>
+        <th>H</th>
+        <th>2B</th>
+        <th>3B</th>
+        <th>HR</th>
+        <th>SB</th>
+        <th>SO%</th>
+        <th>BB%</th>
+        <th>AVG</th>
+        <th>OBP</th>
+        <th>OPS</th>
+      </TableHeader>
+      <TableBody>
         {hitters.map((stat) => (
           <tr className="text-center" key={`standing-stats-${stat.id}`}>
             <td>{stat.position}</td>
@@ -118,32 +117,30 @@ function Hitters({ teamId, hitters }) {
             <td>{stat.stat.ops}</td>
           </tr>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
 
 function Pitchers({ teamId, pitchers }) {
   return (
-    <table className="stats-table mb-4">
-      <thead>
-        <tr className="bg-secondary text-center">
-          <th>Pos</th>
-          <th>#</th>
-          <th className="lg-cell">Player</th>
-          <th>Age</th>
-          <th>T</th>
-          <th>IP</th>
-          <th>ERA</th>
-          <th>SO</th>
-          <th>BB</th>
-          <th>SO%</th>
-          <th>BB%</th>
-          <th>HR/9</th>
-          <th>OPS</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHeader>
+        <th>Pos</th>
+        <th>#</th>
+        <th className="lg-cell">Player</th>
+        <th>Age</th>
+        <th>T</th>
+        <th>IP</th>
+        <th>ERA</th>
+        <th>SO</th>
+        <th>BB</th>
+        <th>SO%</th>
+        <th>BB%</th>
+        <th>HR/9</th>
+        <th>OPS</th>
+      </TableHeader>
+      <TableBody>
         {pitchers.map((stat) => (
           <tr key={`standing-stats-${stat.id}`} className="text-center">
             <td>{stat.position}</td>
@@ -177,7 +174,7 @@ function Pitchers({ teamId, pitchers }) {
             <td>{stat.stat.ops}</td>
           </tr>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

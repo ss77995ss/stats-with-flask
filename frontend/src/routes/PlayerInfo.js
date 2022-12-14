@@ -1,5 +1,6 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import BioStat from '../components/BioStat';
+import { Table, TableHeader, TableBody } from '../components/StatsTable';
 
 export default function PlayerInfo() {
   const { playerInfo, teamInfo } = useLoaderData();
@@ -46,28 +47,26 @@ export default function PlayerInfo() {
 
 function Hitters({ playerInfo }) {
   return (
-    <table className="stats-table">
-      <thead>
-        <tr className="bg-secondary text-center">
-          <th>Year</th>
-          <th className="lg-cell">Team</th>
-          <th>G</th>
-          <th>PA</th>
-          <th>AB</th>
-          <th>R</th>
-          <th>H</th>
-          <th>2B</th>
-          <th>3B</th>
-          <th>HR</th>
-          <th>RBI</th>
-          <th>SB</th>
-          <th>BB</th>
-          <th>OBP</th>
-          <th>SLG</th>
-          <th>OPS</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHeader>
+        <th>Year</th>
+        <th className="lg-cell">Team</th>
+        <th>G</th>
+        <th>PA</th>
+        <th>AB</th>
+        <th>R</th>
+        <th>H</th>
+        <th>2B</th>
+        <th>3B</th>
+        <th>HR</th>
+        <th>RBI</th>
+        <th>SB</th>
+        <th>BB</th>
+        <th>OBP</th>
+        <th>SLG</th>
+        <th>OPS</th>
+      </TableHeader>
+      <TableBody>
         {playerInfo.stats.hitting.map((stat) => (
           <tr className="text-center">
             {stat.team && (
@@ -101,34 +100,32 @@ function Hitters({ playerInfo }) {
             )}
           </tr>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
 
 function Pitchers({ playerInfo }) {
   return (
-    <table className="stats-table">
-      <thead>
-        <tr className="bg-secondary text-center">
-          <th>Year</th>
-          <th className="lg-cell">Team</th>
-          <th>G</th>
-          <th>IP</th>
-          <th>W</th>
-          <th>L</th>
-          <th>SV</th>
-          <th>ERA</th>
-          <th>WHIP</th>
-          <th>H</th>
-          <th>R</th>
-          <th>SO</th>
-          <th>BB</th>
-          <th>HR/9</th>
-          <th>OPS</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHeader>
+        <th>Year</th>
+        <th className="lg-cell">Team</th>
+        <th>G</th>
+        <th>IP</th>
+        <th>W</th>
+        <th>L</th>
+        <th>SV</th>
+        <th>ERA</th>
+        <th>WHIP</th>
+        <th>H</th>
+        <th>R</th>
+        <th>SO</th>
+        <th>BB</th>
+        <th>HR/9</th>
+        <th>OPS</th>
+      </TableHeader>
+      <TableBody>
         {playerInfo.stats.pitching.map((stat) => (
           <tr className="text-center">
             {stat.team && (
@@ -161,7 +158,7 @@ function Pitchers({ playerInfo }) {
             )}
           </tr>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import '../styles/components/StatTable.scss';
+import { Table, TableHeader, TableBody } from '../components/StatsTable';
 
 const STAT_LABEL_MAP = {
   AVG: 'BATTING AVERAGE',
@@ -20,17 +20,15 @@ function LeadersTable({ statName, leaders }) {
       <label style={{ fontWeight: 'bold' }} className="my-2">
         {STAT_LABEL_MAP[statName]}
       </label>
-      <table className="stats-table">
-        <thead>
-          <tr className="bg-secondary text-center">
-            <th>#</th>
-            <th className="lg-cell">Player</th>
-            <th>{statName}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <th>#</th>
+          <th className="lg-cell">Player</th>
+          <th>{statName}</th>
+        </TableHeader>
+        <TableBody>
           {leaders.map((leader) => (
-            <tr className="text-center">
+            <tr>
               <td>{leader.rank}</td>
               <td className="lg-cell">
                 <Link to={`/teams/${leader.team.id}/player/${leader.person.id}`}>
@@ -45,8 +43,8 @@ function LeadersTable({ statName, leaders }) {
               <td>{leader.value}</td>
             </tr>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
