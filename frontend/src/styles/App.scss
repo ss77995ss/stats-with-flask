@@ -1,19 +1,19 @@
-@import './_variables.scss';
+@use "variables";
 
 header {
-  background-color: $nav;
+  background-color: variables.$nav;
 
   img {
     height: 36px;
   }
 
   .nav-item a {
-    color: $offset;
+    color: variables.$offset;
     text-decoration: none;
   }
 
   a.active {
-    border-top: 4px solid $offset;
+    border-top: 4px solid variables.$offset;
     font-weight: bold;
   }
 
@@ -26,6 +26,13 @@ header {
 .content {
   max-width: 1200px;
   margin: auto;
+
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+a {
+  text-decoration: none;
 }
 
 

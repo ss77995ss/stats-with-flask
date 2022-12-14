@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import './App.scss';
+import './styles/App.scss';
 import logo from './homebase-logo.png';
 
 function App() {

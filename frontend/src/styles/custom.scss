@@ -1,0 +1,19 @@
+@use "variables";
+
+$body-bg: variables.$primary;
+$body-color: variables.$offset;
+
+$theme-colors: (
+  "primary": variables.$primary,
+  "secondary": variables.$secondary,
+  "danger": variables.$danger
+);
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@import "~bootstrap/scss/bootstrap.scss";

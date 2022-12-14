@@ -1,17 +1,20 @@
-@import './_variables.scss';
+@use "../variables";
 
 .stats-table {
   width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 
   th {
     width: 3.5rem;
-    &:first-child {
-      border-top-left-radius: .5rem;
-    }
 
-    &:nth-child(2) {
+    &.lg-cell {
       width: auto;
       text-align: left;
+    }
+
+    &:first-child {
+      border-top-left-radius: .5rem;
     }
 
     &:last-child {
@@ -21,7 +24,7 @@
 
   tbody {
     color: black;
-    background-color: white;
+    background-color: variables.$offset;
 
     tr {
       &:nth-child(even) {
@@ -29,8 +32,9 @@
       }
 
       td {
-        &:nth-child(2) {
+        &.lg-cell {
           text-align: left;
+
           img {
             width: 1.5rem;
             height: 1.5rem;
