@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from 'react-router-dom';
+import useSortStat from '../hooks/useSortStat';
 import BioStat from '../components/BioStat';
-import { Table, TableHeader, TableBody } from '../components/StatsTable';
+import { Table, TableHeader, TableHeaderSortCell, TableBody } from '../components/StatsTable';
 
 export default function PlayerInfo() {
   const { playerInfo, teamInfo } = useLoaderData();
@@ -46,28 +47,30 @@ export default function PlayerInfo() {
 }
 
 function Hitters({ playerInfo }) {
+  const [sorted, handleOnSelectStat] = useSortStat();
+
   return (
     <Table>
       <TableHeader>
         <th>Year</th>
         <th className="lg-cell">Team</th>
-        <th>G</th>
-        <th>PA</th>
-        <th>AB</th>
-        <th>R</th>
-        <th>H</th>
-        <th>2B</th>
-        <th>3B</th>
-        <th>HR</th>
-        <th>RBI</th>
-        <th>SB</th>
-        <th>BB</th>
-        <th>OBP</th>
-        <th>SLG</th>
-        <th>OPS</th>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>G</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>PA</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>AB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>R</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>H</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>2B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>3B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>HR</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>RBI</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>SB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>BB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>OBP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>SLG</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {playerInfo.stats.hitting.map((stat) => (
+        {sorted(playerInfo.stats.hitting).map((stat) => (
           <tr className="text-center">
             {stat.team && (
               <>
@@ -106,27 +109,29 @@ function Hitters({ playerInfo }) {
 }
 
 function Pitchers({ playerInfo }) {
+  const [sorted, handleOnSelectStat] = useSortStat();
+
   return (
     <Table>
       <TableHeader>
         <th>Year</th>
         <th className="lg-cell">Team</th>
-        <th>G</th>
-        <th>IP</th>
-        <th>W</th>
-        <th>L</th>
-        <th>SV</th>
-        <th>ERA</th>
-        <th>WHIP</th>
-        <th>H</th>
-        <th>R</th>
-        <th>SO</th>
-        <th>BB</th>
-        <th>HR/9</th>
-        <th>OPS</th>
+        <TableHeaderSortCell onClick={handleOnSelectStat('gamesPitched')}>G</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('inningsPitched')}>IP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('wins')}>W</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('losses')}>L</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('saves')}>SV</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('era')}>ERA</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('whip')}>WHIP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('hits')}>H</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('runs')}>R</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('strikeOuts')}>SO</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('baseOnBalls')}>BB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('homeRunsPer9')}>HR/9</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {playerInfo.stats.pitching.map((stat) => (
+        {sorted(playerInfo.stats.pitching).map((stat) => (
           <tr className="text-center">
             {stat.team && (
               <>

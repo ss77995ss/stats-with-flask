@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
-import { Table, TableHeader, TableBody } from '../components/StatsTable';
+import { useState, useMemo } from 'react';
+import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
+import useSortStat from '../hooks/useSortStat';
+import { Table, TableHeader, TableHeaderSortCell, TableBody } from '../components/StatsTable';
 import '../styles/components/Info.scss';
 
 const RANK_MAP = {
@@ -13,9 +14,17 @@ const RANK_MAP = {
 
 export default function TeamInfo() {
   const { teamInfo } = useLoaderData();
-  const [playerType, setPlayerType] = useState('Hitters');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultPlayerType =
+    searchParams.get('type') === 'Hitters' || searchParams.get('type') === 'Pitchers'
+      ? searchParams.get('type')
+      : 'Hitters';
+  const [playerType, setPlayerType] = useState(defaultPlayerType);
 
-  const handleToggle = (e) => setPlayerType(e.target.value);
+  const handleToggle = (e) => {
+    setPlayerType(e.target.value);
+    setSearchParams({ type: e.target.value });
+  };
 
   return (
     <div>
@@ -33,7 +42,7 @@ export default function TeamInfo() {
           </div>
         </div>
         <div className="info-toggle-buttons">
-          <button value="Hitters" className={`${playerType === 'Hitters' && 'active'}`} onClick={handleToggle}>
+          <button value="Hitters" className={`${playerType !== 'Pitchers' && 'active'}`} onClick={handleToggle}>
             Hitters
           </button>
           <button value="Pitchers" className={`${playerType === 'Pitchers' && 'active'}`} onClick={handleToggle}>
@@ -41,7 +50,7 @@ export default function TeamInfo() {
           </button>
         </div>
       </div>
-      {playerType === 'Hitters' ? (
+      {playerType !== 'Pitchers' ? (
         <Hitters
           teamId={teamInfo.id}
           hitters={teamInfo.rosters.filter((roster) => roster.position !== 'P' && roster.position !== 'TWP')}
@@ -56,7 +65,45 @@ export default function TeamInfo() {
   );
 }
 
+const getResolvedStats = (type, stats) =>
+  stats.map((item) => {
+    if (type === 'Pitchers') {
+      return {
+        ...item,
+        stat: {
+          ...item.stat,
+          strikeOutsPercent:
+            item.stat.battersFaced > 0
+              ? (item.stat.strikeOuts / item.stat.battersFaced).toFixed(3).replace(/^0+/, '')
+              : '.000',
+          basedOnBallPercent:
+            item.stat.battersFaced > 0
+              ? (item.stat.baseOnBalls / item.stat.battersFaced).toFixed(3).replace(/^0+/, '')
+              : '.000',
+        },
+      };
+    }
+
+    return {
+      ...item,
+      stat: {
+        ...item.stat,
+        strikeOutsPercent:
+          item.stat.plateAppearances > 0
+            ? (item.stat.strikeOuts / item.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
+            : '.000',
+        basedOnBallPercent:
+          item.stat.plateAppearances > 0
+            ? (item.stat.baseOnBalls / item.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
+            : '.000',
+      },
+    };
+  });
+
 function Hitters({ teamId, hitters }) {
+  const [sorted, handleOnSelectStat] = useSortStat();
+  const resolvedHitters = useMemo(() => getResolvedStats('Hitters', hitters), [hitters]);
+
   return (
     <Table>
       <TableHeader>
@@ -66,20 +113,20 @@ function Hitters({ teamId, hitters }) {
         <th>Age</th>
         <th>B</th>
         <th>T</th>
-        <th>PA</th>
-        <th>H</th>
-        <th>2B</th>
-        <th>3B</th>
-        <th>HR</th>
-        <th>SB</th>
-        <th>SO%</th>
-        <th>BB%</th>
-        <th>AVG</th>
-        <th>OBP</th>
-        <th>OPS</th>
+        <TableHeaderSortCell onClick={handleOnSelectStat('plateAppearances')}>PA</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('hits')}>H</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('doubles')}>2B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('triples')}>3B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('homeRuns')}>HR</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('stolenBases')}>SB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('strikeOutsPercent')}>SO%</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('basedOnBallPercent')}>BB%</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('avg')}>AVG</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('obp')}>OBP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {hitters.map((stat) => (
+        {sorted(resolvedHitters).map((stat) => (
           <tr className="text-center" key={`standing-stats-${stat.id}`}>
             <td>{stat.position}</td>
             <td>{stat.jerseyNumber}</td>
@@ -102,16 +149,8 @@ function Hitters({ teamId, hitters }) {
             <td>{stat.stat.triples}</td>
             <td>{stat.stat.homeRuns}</td>
             <td>{stat.stat.stolenBases}</td>
-            <td>
-              {stat.stat.plateAppearances > 0
-                ? (stat.stat.strikeOuts / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
-                : '.000'}
-            </td>
-            <td>
-              {stat.stat.plateAppearances > 0
-                ? (stat.stat.baseOnBalls / stat.stat.plateAppearances).toFixed(3).replace(/^0+/, '')
-                : '.000'}
-            </td>
+            <td>{stat.stat.strikeOutsPercent}</td>
+            <td>{stat.stat.basedOnBallPercent}</td>
             <td>{stat.stat.avg}</td>
             <td>{stat.stat.obp}</td>
             <td>{stat.stat.ops}</td>
@@ -123,6 +162,9 @@ function Hitters({ teamId, hitters }) {
 }
 
 function Pitchers({ teamId, pitchers }) {
+  const [sorted, handleOnSelectStat] = useSortStat();
+  const resolvedPitchers = useMemo(() => getResolvedStats('Pitchers', pitchers), [pitchers]);
+
   return (
     <Table>
       <TableHeader>
@@ -131,17 +173,17 @@ function Pitchers({ teamId, pitchers }) {
         <th className="lg-cell">Player</th>
         <th>Age</th>
         <th>T</th>
-        <th>IP</th>
-        <th>ERA</th>
-        <th>SO</th>
-        <th>BB</th>
-        <th>SO%</th>
-        <th>BB%</th>
-        <th>HR/9</th>
-        <th>OPS</th>
+        <TableHeaderSortCell onClick={handleOnSelectStat('inningsPitched')}>IP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('era')}>ERA</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('strikeOuts')}>SO</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('baseOnBalls')}>BB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('strikeOutsPercent')}>SO%</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('basedOnBallPercent')}>BB%</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('homeRunsPer9')}>HR/9</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {pitchers.map((stat) => (
+        {sorted(resolvedPitchers).map((stat) => (
           <tr key={`standing-stats-${stat.id}`} className="text-center">
             <td>{stat.position}</td>
             <td>{stat.jerseyNumber}</td>
@@ -160,16 +202,8 @@ function Pitchers({ teamId, pitchers }) {
             <td>{stat.stat.era}</td>
             <td>{stat.stat.strikeOuts}</td>
             <td>{stat.stat.baseOnBalls}</td>
-            <td>
-              {stat.stat.battersFaced > 0
-                ? (stat.stat.strikeOuts / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
-                : '.000'}
-            </td>
-            <td>
-              {stat.stat.battersFaced > 0
-                ? (stat.stat.baseOnBalls / stat.stat.battersFaced).toFixed(3).replace(/^0+/, '')
-                : '.000'}
-            </td>
+            <td>{stat.stat.strikeOutsPercent}</td>
+            <td>{stat.stat.basedOnBallPercent}</td>
             <td>{stat.stat.homeRunsPer9}</td>
             <td>{stat.stat.ops}</td>
           </tr>

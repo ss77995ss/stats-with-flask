@@ -13,6 +13,10 @@
       text-align: left;
     }
 
+    &.click-header {
+      cursor: pointer;
+    }
+
     &:first-child {
       border-top-left-radius: .5rem;
     }

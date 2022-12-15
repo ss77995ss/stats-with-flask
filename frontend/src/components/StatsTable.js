@@ -12,8 +12,16 @@ function TableHeader({ children }) {
   );
 }
 
+function TableHeaderSortCell({ children, onClick }) {
+  return (
+    <th className="click-header" onClick={onClick}>
+      {children}
+    </th>
+  );
+}
+
 function TableBody({ children }) {
   return <tbody className="text-center">{children}</tbody>;
 }
 
-export { Table, TableHeader, TableBody };
+export { Table, TableHeader, TableHeaderSortCell, TableBody };
