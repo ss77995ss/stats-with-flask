@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
 import useSortStat from '../hooks/useSortStat';
 import { Table, TableHeader, TableHeaderSortCell, TableBody } from '../components/StatsTable';
@@ -15,8 +15,14 @@ const RANK_MAP = {
 export default function TeamInfo() {
   const { teamInfo } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
+  const defaultPlayerType =
+    searchParams.get('type') === 'Hitters' || searchParams.get('type') === 'Pitchers'
+      ? searchParams.get('type')
+      : 'Hitters';
+  const [playerType, setPlayerType] = useState(defaultPlayerType);
 
   const handleToggle = (e) => {
+    setPlayerType(e.target.value);
     setSearchParams({ type: e.target.value });
   };
 
@@ -36,23 +42,15 @@ export default function TeamInfo() {
           </div>
         </div>
         <div className="info-toggle-buttons">
-          <button
-            value="Hitters"
-            className={`${searchParams.get('type') !== 'Pitchers' && 'active'}`}
-            onClick={handleToggle}
-          >
+          <button value="Hitters" className={`${playerType !== 'Pitchers' && 'active'}`} onClick={handleToggle}>
             Hitters
           </button>
-          <button
-            value="Pitchers"
-            className={`${searchParams.get('type') === 'Pitchers' && 'active'}`}
-            onClick={handleToggle}
-          >
+          <button value="Pitchers" className={`${playerType === 'Pitchers' && 'active'}`} onClick={handleToggle}>
             Pitchers
           </button>
         </div>
       </div>
-      {searchParams.get('type') !== 'Pitchers' ? (
+      {playerType !== 'Pitchers' ? (
         <Hitters
           teamId={teamInfo.id}
           hitters={teamInfo.rosters.filter((roster) => roster.position !== 'P' && roster.position !== 'TWP')}
