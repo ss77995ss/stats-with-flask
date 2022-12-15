@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
 import { Table, TableHeader, TableBody } from '../components/StatsTable';
 import '../styles/components/Info.scss';
@@ -14,10 +13,8 @@ const RANK_MAP = {
 export default function TeamInfo() {
   const { teamInfo } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [playerType, setPlayerType] = useState('Hitters');
 
   const handleToggle = (e) => {
-    setPlayerType(e.target.value);
     setSearchParams({ type: e.target.value });
   };
 
