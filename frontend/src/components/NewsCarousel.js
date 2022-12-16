@@ -19,18 +19,18 @@ export default function NewsCarousel({ news }) {
   return (
     <div
       style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-      class="carousel slide"
+      className="carousel slide"
       data-ride="carousel"
     >
-      <button class="carousel-control-prev-icon btn btn-outline" onClick={handlePrev(carouselIndex)}></button>
-      <div class="carousel-inner">
+      <button className="carousel-control-prev-icon btn btn-outline" onClick={handlePrev(carouselIndex)}></button>
+      <div className="carousel-inner">
         {news.map((item, index) => (
-          <div class={`carousel-item ${index === carouselIndex && 'active'}`}>
+          <div className={`carousel-item ${index === carouselIndex && 'active'}`}>
             <News news={item} />
           </div>
         ))}
       </div>
-      <button class="carousel-control-next-icon btn btn-outline" onClick={handleNext(carouselIndex)}></button>
+      <button className="carousel-control-next-icon btn btn-outline" onClick={handleNext(carouselIndex)}></button>
     </div>
   );
 }
