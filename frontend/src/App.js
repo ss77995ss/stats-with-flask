@@ -33,7 +33,7 @@ function App() {
           <div>Author: Li-Hsuan Hsieh</div>
           <div>
             <a className="m-2" href="mailto:ss77995ss@gmail.com">
-              <i className="bi bi-envelope"></i>
+              <i class="bi bi-envelope"></i>
             </a>
             <a
               className="m-2"
@@ -41,10 +41,10 @@ function App() {
               rel="noopener noreferrer"
               href="https://www.linkedin.com/in/li-hsuan-hsieh-4b4390169/"
             >
-              <i className="bi bi-linkedin"></i>
+              <i class="bi bi-linkedin"></i>
             </a>
             <a className="m-2" target="_blank" rel="noopener noreferrer" href="https://github.com/ss77995ss">
-              <i className="bi bi-github"></i>
+              <i class="bi bi-github"></i>
             </a>
           </div>
         </footer>
