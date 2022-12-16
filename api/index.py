@@ -5,6 +5,8 @@ import json
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 api_domain = "https://statsapi.mlb.com"
+user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7"
+headers = {"User-Agent": user_agent}
 
 division_map = {
     "200": "AL West",
@@ -13,6 +15,39 @@ division_map = {
     "203": "NL West",
     "204": "NL East",
     "205": "NL Central"
+}
+
+team_url_map = {
+    "108": "angels",
+    "109": "dbacks",
+    "110": "orioles",
+    "111": "redsox",
+    "112": "cubs",
+    "113": "reds",
+    "114": "guardians",
+    "115": "rockies",
+    "116": "tigers",
+    "117": "astros",
+    "118": "royals",
+    "119": "dodgers",
+    "120": "nationals",
+    "121": "mets",
+    "133": "ahletics",
+    "134": "pirates",
+    "135": "padres",
+    "136": "mariners",
+    "137": "giants",
+    "138": "cardinals",
+    "139": "rays",
+    "140": "rangers",
+    "141": "bluejays",
+    "142": "twins",
+    "143": "phillies",
+    "144": "braves",
+    "145": "whitesox",
+    "141": "marlins",
+    "142": "yankees",
+    "158": "brewers"
 }
 
 
@@ -80,6 +115,31 @@ def rosters(team_id):
             print(roster["person"]["id"], roster["person"]["fullName"])
             print(repr(e))
 
+    team_url = team_url_map[str(team["id"])]
+    news_url = f"https://www.mlb.com/{team_url}/feeds/news/rss.xml"
+
+    request = urllib.request.Request(
+        news_url, None, headers)
+    response = urllib.request.urlopen(request)
+    data = response.read()
+    data_dict = xmltodict.parse(data.decode("utf-8"))
+
+    news = data_dict["rss"]["channel"]["item"]
+
+    group_news = []
+    group = []
+
+    for index, item in enumerate(news):
+        if index % 4 == 3:
+            group.append(item)
+            group_news.append(group)
+            group = []
+        else:
+            group.append(item)
+
+    if len(group) > 0:
+        group_news.append(group)
+
     return {
         "id": team["id"],
         "name": team["name"],
@@ -89,7 +149,8 @@ def rosters(team_id):
         "winningPercentage": team_record["winningPercentage"],
         "divisionGamesBack": team_record["divisionGamesBack"],
         "divisionRank": team_record["divisionRank"],
-        "rosters": new_rosters
+        "rosters": new_rosters,
+        "news": group_news
     }
 
 
@@ -185,9 +246,56 @@ def pitching_leaderboard(category):
 
 @app.route("/api/news")
 def news():
-    with open("rss.xml") as xml_file:
-        data_dict = xmltodict.parse(xml_file.read())
+    url = "https://www.mlb.com/feeds/news/rss.xml"
+    request = urllib.request.Request(
+        url, None, headers)
+    response = urllib.request.urlopen(request)
+    data = response.read()
+    data_dict = xmltodict.parse(data.decode("utf-8"))
 
-    news = data_dict["rss"]["channel"]["item"][0:4]
+    news = data_dict["rss"]["channel"]["item"]
 
-    return news
+    group_news = []
+    group = []
+
+    for index, item in enumerate(news):
+        if index % 4 == 3:
+            group.append(item)
+            group_news.append(group)
+            group = []
+        else:
+            group.append(item)
+
+    if len(group) > 0:
+        group_news.append(group)
+
+    return group_news
+
+
+@app.route("/api/news/<team_id>")
+def team_news(team_id):
+    url = f"https://www.mlb.com/{team_id}/feeds/news/rss.xml"
+
+    request = urllib.request.Request(
+        url, None, headers)
+    response = urllib.request.urlopen(request)
+    data = response.read()
+    data_dict = xmltodict.parse(data.decode("utf-8"))
+
+    news = data_dict["rss"]["channel"]["item"]
+
+    group_news = []
+    group = []
+
+    for index, item in enumerate(news):
+        if index % 4 == 3:
+            group.append(item)
+            group_news.append(group)
+            group = []
+        else:
+            group.append(item)
+
+    if len(group) > 0:
+        group_news.append(group)
+
+    return group_news
