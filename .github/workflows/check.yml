@@ -24,7 +24,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        cache-dependency-path: ./frontend/yarn-lock.json
+        cache-dependency-path: ./frontend/yarn.lock
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - run: yarn ci
