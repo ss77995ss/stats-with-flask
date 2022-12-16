@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import StandingTable from '../components/StandingTable';
-import News from '../components/News';
+import NewsCarousel from '../components/NewsCarousel';
 
 export default function Teams() {
   const { standings } = useLoaderData();
@@ -29,8 +30,22 @@ export default function Teams() {
           </div>
         </div>
       </div>
+      <MlbNews />
+    </div>
+  );
+}
+
+function MlbNews() {
+  const { isLoading, error, data: news } = useQuery('news', () => fetch('api/news').then((res) => res.json()));
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (error) return <div>{`Error: ${error.message}`}</div>;
+
+  return (
+    <div>
       <h3>News</h3>
-      <News />
+      <NewsCarousel news={news} />
     </div>
   );
 }

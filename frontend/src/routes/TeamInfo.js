@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
 import useSortStat from '../hooks/useSortStat';
 import { Table, TableHeader, TableHeaderSortCell, TableBody } from '../components/StatsTable';
+import NewsCarousel from '../components/NewsCarousel';
 import '../styles/components/Info.scss';
 
 const RANK_MAP = {
@@ -61,6 +62,10 @@ export default function TeamInfo() {
           pitchers={teamInfo.rosters.filter((roster) => roster.position === 'P' || roster.position === 'TWP')}
         />
       )}
+      <div>
+        <h3>News</h3>
+        <NewsCarousel news={teamInfo.news} />
+      </div>
     </div>
   );
 }
