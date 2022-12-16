@@ -24,7 +24,7 @@ jest.mock('react-router-dom', () => ({
   },
 }));
 
-test('renders Standing page', async () => {
+test('renders TeamInfo page', async () => {
   render(
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={['/teams/141']}>
@@ -46,9 +46,24 @@ test('renders Standing page', async () => {
 
   const headers = await screen.findAllByRole('columnheader');
   expect(headers).toHaveLength(17);
+});
+
+test('switch between different player type', async () => {
+  render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={['/teams/141']}>
+        <Routes>
+          <Route path="teams/:teamId" element={<TeamInfo />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>,
+  );
 
   await userEvent.click(screen.getByText('Pitchers'));
 
   const pitcherHeaders = await screen.findAllByRole('columnheader');
   expect(pitcherHeaders).toHaveLength(13);
+
+  await userEvent.click(screen.getByText('Hitters'));
+  expect(pitcherHeaders).toHaveLength(17);
 });
