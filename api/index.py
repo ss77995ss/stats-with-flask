@@ -220,6 +220,16 @@ def player(player_id):
     return new_player
 
 
+@app.route("/api/leaderboard/types")
+def leaderboard_types():
+    response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/leagueLeaderTypes")
+    data = response.read()
+    dict = json.loads(data)
+
+    return list(map(lambda x: x["displayName"], dict))
+
+
 @app.route("/api/leaderboard/hitting/<category>")
 def hitting_leaderboard(category):
     response = urllib.request.urlopen(
