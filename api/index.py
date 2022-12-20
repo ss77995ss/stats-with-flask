@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 import urllib.request
 import xmltodict
 import json
 
 app = Flask(__name__, static_folder='static', static_url_path='')
+CORS(app)
 api_domain = "https://statsapi.mlb.com"
 user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7"
 headers = {"User-Agent": user_agent, "Access-Control-Allow-Origin": "*"}
