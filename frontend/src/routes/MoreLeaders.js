@@ -1,20 +1,24 @@
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import Leaders from '../components/Leaders';
 
 export default function MoreLeaders() {
-  const [selectedType, setSelectedType] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedType, setSelectedType] = useState(searchParams.get('type'));
   const { leaderTypes } = useLoaderData();
 
-  const handleSelect = (e) => setSelectedType(e.target.value);
+  const handleSelect = (e) => {
+    setSelectedType(e.target.value);
+    setSearchParams({ type: e.target.value });
+  };
 
   return (
     <div>
       <h3>Leaderboards</h3>
       <div className="text-center">
         <h5>Select Stat: {selectedType}</h5>
-        <select onChange={handleSelect}>
+        <select onChange={handleSelect} defaultValue={selectedType}>
           <option value=""></option>
           {leaderTypes.map((leader, index) => (
             <option key={`select-leader-type-${index}`} value={leader}>
