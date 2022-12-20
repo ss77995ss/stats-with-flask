@@ -1,6 +1,6 @@
 ![Test Check](https://github.com/ss77995ss/stats-with-flask/actions/workflows/check.yml/badge.svg)
 
-# Stats In Flask
+# Stats With Flask
 
 ## Introduction
 
