@@ -1,6 +1,7 @@
 import { Outlet, Link, NavLink } from 'react-router-dom';
 import './styles/App.scss';
 import logo from './homebase-logo.png';
+import Breadcrumbs from './components/Breadcrumbs';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         </nav>
       </header>
       <section className="content">
+        <Breadcrumbs />
         <Outlet />
       </section>
       <section className="footer text-center">
