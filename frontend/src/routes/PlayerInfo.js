@@ -70,8 +70,8 @@ function Hitters({ playerInfo }) {
         <TableHeaderSortCell onClick={handleOnSelectStat('')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {sorted(playerInfo.stats.hitting).map((stat) => (
-          <tr className="text-center">
+        {sorted(playerInfo.stats.hitting).map((stat, index) => (
+          <tr key={`player-info-hitting-${index}`} className="text-center">
             {stat.team && (
               <>
                 <td>{stat.season}</td>
@@ -131,8 +131,8 @@ function Pitchers({ playerInfo }) {
         <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {sorted(playerInfo.stats.pitching).map((stat) => (
-          <tr className="text-center">
+        {sorted(playerInfo.stats.pitching).map((stat, index) => (
+          <tr key={`player-info-pitching-${index}`} className="text-center">
             {stat.team && (
               <>
                 <td>{stat.season}</td>

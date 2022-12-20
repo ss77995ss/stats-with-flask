@@ -25,7 +25,7 @@ export default function NewsCarousel({ news }) {
       <button className="carousel-control-prev-icon btn btn-outline" onClick={handlePrev(carouselIndex)}></button>
       <div className="carousel-inner">
         {news.map((item, index) => (
-          <div className={`carousel-item ${index === carouselIndex && 'active'}`}>
+          <div key={`news-carousel-${index}`} className={`carousel-item ${index === carouselIndex && 'active'}`}>
             <News news={item} />
           </div>
         ))}
