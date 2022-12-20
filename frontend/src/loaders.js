@@ -17,6 +17,12 @@ export async function playerInfoLoader({ params }) {
   return { teamInfo, playerInfo };
 }
 
+export async function leaderTypesLoader() {
+  const leaderTypes = await fetch('/api/leaderboard/types').then((res) => res.json());
+
+  return { leaderTypes };
+}
+
 export async function leaderboardLoader() {
   const avg = await fetch('/api/leaderboard/hitting/avg').then((res) => res.json());
   const hr = await fetch('/api/leaderboard/hitting/homeRuns').then((res) => res.json());

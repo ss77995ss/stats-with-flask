@@ -239,7 +239,7 @@ def hitting_leaderboard(category):
     leaders = list(filter(lambda x: x["statGroup"] ==
                           "hitting", dict["leagueLeaders"]))
 
-    return leaders[0]["leaders"][0:5]
+    return leaders[0]["leaders"][0:5] if len(leaders) > 0 else []
 
 
 @app.route("/api/leaderboard/pitching/<category>")
@@ -251,7 +251,26 @@ def pitching_leaderboard(category):
     leaders = list(filter(lambda x: x["statGroup"] ==
                           "pitching", dict["leagueLeaders"]))
 
-    return leaders[0]["leaders"][0:5]
+    return leaders[0]["leaders"][0:5] if len(leaders) > 0 else []
+
+
+@app.route("/api/leaderboard/all/<category>")
+def all_group_leaderboard(category):
+    response = urllib.request.urlopen(
+        f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
+    data = response.read()
+    dict = json.loads(data)
+
+    leaderboard = {}
+
+    for leaders in dict["leagueLeaders"]:
+        if leaders["statGroup"] not in leaderboard:
+            if "leaders" in leaders:
+                leaderboard[leaders["statGroup"]] = {}
+                leaderboard[leaders["statGroup"]
+                            ][leaders["leaderCategory"]] = leaders["leaders"][0:5]
+
+    return leaderboard
 
 
 @app.route("/api/news")
