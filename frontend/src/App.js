@@ -1,9 +1,11 @@
-import { Outlet, Link, NavLink } from 'react-router-dom';
+import { Outlet, Link, NavLink, useLocation } from 'react-router-dom';
 import './styles/App.scss';
 import logo from './homebase-logo.png';
 import Breadcrumbs from './components/Breadcrumbs';
 
 function App() {
+  const location = useLocation();
+
   return (
     <section className="main">
       <header>
@@ -27,8 +29,18 @@ function App() {
         </nav>
       </header>
       <section className="content">
-        <Breadcrumbs />
-        <Outlet />
+        {location.pathname !== '/' ? (
+          <>
+            <Breadcrumbs />
+            <Outlet />
+          </>
+        ) : (
+          <div style={{ textAlign: 'center', margin: '20%' }}>
+            <h2>Welcome to Stats App</h2>
+            <p>An App to Show Stats in MLB</p>
+            <p>Start with Clicking the Navigation on the top right</p>
+          </div>
+        )}
       </section>
       <section className="footer text-center">
         <footer className="p-2">
