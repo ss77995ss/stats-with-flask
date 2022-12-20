@@ -48,26 +48,26 @@ export default function PlayerInfo() {
 
 function Hitters({ playerInfo }) {
   const [sorted, handleOnSelectStat] = useSortStat();
-
+  console.log(playerInfo);
   return (
     <Table>
       <TableHeader>
         <th>Year</th>
         <th className="lg-cell">Team</th>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>G</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>PA</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>AB</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>R</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>H</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>2B</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>3B</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>HR</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>RBI</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>SB</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>BB</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>OBP</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>SLG</TableHeaderSortCell>
-        <TableHeaderSortCell onClick={handleOnSelectStat('')}>OPS</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('gamesPlayed')}>G</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('plateAppearances')}>PA</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('atBats')}>AB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('runs')}>R</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('hits')}>H</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('doubles')}>2B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('triples')}>3B</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('homeRuns')}>HR</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('rbi')}>RBI</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('strikeOuts')}>SO</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('baseOnBalls')}>BB</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('obp')}>OBP</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('slg')}>SLG</TableHeaderSortCell>
+        <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
         {sorted(playerInfo.stats.hitting).map((stat, index) => (
