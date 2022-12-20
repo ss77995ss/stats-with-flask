@@ -40,6 +40,7 @@ Datasource is based on MLB [statsapi](https://statsapi.mlb.com)
 ## Demo
 
 API Server: https://stats-with-flask.vercel.app/
+Demo Site: https://stats-with-flask-f2e-demo.vercel.app/
 
 ## How it Works
 
