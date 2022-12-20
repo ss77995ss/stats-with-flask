@@ -6,7 +6,7 @@ import json
 app = Flask(__name__, static_folder='static', static_url_path='')
 api_domain = "https://statsapi.mlb.com"
 user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7"
-headers = {"User-Agent": user_agent}
+headers = {"User-Agent": user_agent, "Access-Control-Allow-Origin": "*"}
 
 division_map = {
     "200": "AL West",
@@ -53,17 +53,61 @@ team_url_map = {
 }
 
 
+def get_api_data(url):
+    response = urllib.request.urlopen(
+        f"{api_domain}{url}")
+    data = response.read()
+    dict = json.loads(data)
+
+    return dict
+
+
+def get_xml_data(url):
+    request = urllib.request.Request(
+        url, None, headers)
+    response = urllib.request.urlopen(request)
+    data = response.read()
+    data_dict = xmltodict.parse(data.decode("utf-8"))
+
+    news = data_dict["rss"]["channel"]["item"]
+
+    group_news = []
+    group = []
+
+    for index, item in enumerate(news):
+        if index % 4 == 3:
+            group.append(item)
+            group_news.append(group)
+            group = []
+        else:
+            group.append(item)
+
+    if len(group) > 0:
+        group_news.append(group)
+
+    return group_news
+
+
 @app.route("/api/")
 def home():
-    return "Hello World!"
+    return {
+        "available_apis": {
+            "team": "/api/team/<team_id>",
+            "rosters": "/api/rosters/<team_id>",
+            "standings": "/api/standings",
+            "player": "/api/player/<player_id>",
+            "leaderboard_types": "/api/leaderboard/types",
+            "leaderboard": "/api/leaderboard/<stat_group>/<category>",
+            "all_group_leaderboard": "/api/leaderboard/all/<category>",
+            "news": "/api/news",
+            "team_news": "/api/news/<team_id>"
+        }
+    }
 
 
 @app.route("/api/team/<team_id>")
 def team(team_id):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/teams/{team_id}?sportId=1")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/teams/{team_id}")
     team = dict["teams"][0]
 
     return {
@@ -77,26 +121,19 @@ def team(team_id):
 
 @app.route("/api/rosters/<team_id>")
 def rosters(team_id):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/teams/{team_id}")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/teams/{team_id}")
     team = dict["teams"][0]
 
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/standings?leagueId=103,104")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/standings?leagueId=103,104")
     records = dict["records"]
+
     division_records = list(
         filter(lambda x: x["division"]["id"] == team["division"]["id"], records))
     team_record = list(
         filter(lambda x: x["team"]["id"] == team["id"], division_records[0]["teamRecords"]))[0]
 
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/teams/{team_id}/roster/Active?hydrate=person(stats(type=season))")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(
+        f"/api/v1/teams/{team_id}/roster/Active?hydrate=person(stats(type=season))")
     rosters = dict["roster"]
     new_rosters = []
 
@@ -119,28 +156,7 @@ def rosters(team_id):
 
     team_url = team_url_map[str(team["id"])]
     news_url = f"https://www.mlb.com/{team_url}/feeds/news/rss.xml"
-
-    request = urllib.request.Request(
-        news_url, None, headers)
-    response = urllib.request.urlopen(request)
-    data = response.read()
-    data_dict = xmltodict.parse(data.decode("utf-8"))
-
-    news = data_dict["rss"]["channel"]["item"]
-
-    group_news = []
-    group = []
-
-    for index, item in enumerate(news):
-        if index % 4 == 3:
-            group.append(item)
-            group_news.append(group)
-            group = []
-        else:
-            group.append(item)
-
-    if len(group) > 0:
-        group_news.append(group)
+    group_news = get_xml_data(news_url)
 
     return {
         "id": team["id"],
@@ -158,15 +174,10 @@ def rosters(team_id):
 
 @app.route("/api/standings")
 def standings():
-    response = urllib.request.urlopen(f"{api_domain}/api/v1/teams?sportId=1")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/teams?sportId=1")
     teams = dict["teams"]
 
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/standings?leagueId=103,104")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/standings?leagueId=103,104")
     records = dict["records"]
     standing_dict = {}
 
@@ -195,10 +206,8 @@ def standings():
 
 @app.route("/api/player/<player_id>")
 def player(player_id):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/people/{player_id}?hydrate=stats(group=[hitting,pitching,fielding],type=[yearByYear])")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(
+        f"/api/v1/people/{player_id}?hydrate=stats(group=[hitting,pitching,fielding],type=[yearByYear])")
     player = dict["people"][0]
     stats = player["stats"]
     new_stats = {}
@@ -224,44 +233,23 @@ def player(player_id):
 
 @app.route("/api/leaderboard/types")
 def leaderboard_types():
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/leagueLeaderTypes")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data("/api/v1/leagueLeaderTypes")
 
     return list(map(lambda x: x["displayName"], dict))
 
 
-@app.route("/api/leaderboard/hitting/<category>")
-def hitting_leaderboard(category):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
-    data = response.read()
-    dict = json.loads(data)
+@app.route("/api/leaderboard/<stat_group>/<category>")
+def leaderboard(stat_group, category):
+    dict = get_api_data(f"/api/v1/stats/leaders?leaderCategories={category}")
     leaders = list(filter(lambda x: x["statGroup"] ==
-                          "hitting", dict["leagueLeaders"]))
-
-    return leaders[0]["leaders"][0:5] if len(leaders) > 0 else []
-
-
-@app.route("/api/leaderboard/pitching/<category>")
-def pitching_leaderboard(category):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
-    data = response.read()
-    dict = json.loads(data)
-    leaders = list(filter(lambda x: x["statGroup"] ==
-                          "pitching", dict["leagueLeaders"]))
+                          stat_group, dict["leagueLeaders"]))
 
     return leaders[0]["leaders"][0:5] if len(leaders) > 0 else []
 
 
 @app.route("/api/leaderboard/all/<category>")
 def all_group_leaderboard(category):
-    response = urllib.request.urlopen(
-        f"{api_domain}/api/v1/stats/leaders?leaderCategories={category}")
-    data = response.read()
-    dict = json.loads(data)
+    dict = get_api_data(f"/api/v1/stats/leaders?leaderCategories={category}")
 
     leaderboard = {}
 
@@ -278,27 +266,7 @@ def all_group_leaderboard(category):
 @app.route("/api/news")
 def news():
     url = "https://www.mlb.com/feeds/news/rss.xml"
-    request = urllib.request.Request(
-        url, None, headers)
-    response = urllib.request.urlopen(request)
-    data = response.read()
-    data_dict = xmltodict.parse(data.decode("utf-8"))
-
-    news = data_dict["rss"]["channel"]["item"]
-
-    group_news = []
-    group = []
-
-    for index, item in enumerate(news):
-        if index % 4 == 3:
-            group.append(item)
-            group_news.append(group)
-            group = []
-        else:
-            group.append(item)
-
-    if len(group) > 0:
-        group_news.append(group)
+    group_news = get_xml_data(url)
 
     return group_news
 
@@ -306,27 +274,6 @@ def news():
 @app.route("/api/news/<team_id>")
 def team_news(team_id):
     url = f"https://www.mlb.com/{team_id}/feeds/news/rss.xml"
-
-    request = urllib.request.Request(
-        url, None, headers)
-    response = urllib.request.urlopen(request)
-    data = response.read()
-    data_dict = xmltodict.parse(data.decode("utf-8"))
-
-    news = data_dict["rss"]["channel"]["item"]
-
-    group_news = []
-    group = []
-
-    for index, item in enumerate(news):
-        if index % 4 == 3:
-            group.append(item)
-            group_news.append(group)
-            group = []
-        else:
-            group.append(item)
-
-    if len(group) > 0:
-        group_news.append(group)
+    group_news = get_xml_data(url)
 
     return group_news

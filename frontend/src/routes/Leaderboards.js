@@ -7,7 +7,10 @@ export default function Leaderboards() {
   return (
     <div>
       <h3>League Leaders</h3>
-      <Link to="more">More!</Link>
+
+      <Link to="more">
+        <button className="btn btn-secondary">More!</button>
+      </Link>
       <Leaders leaders={leaders} />
     </div>
   );
