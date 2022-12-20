@@ -6,8 +6,9 @@ import './styles/custom.scss';
 import App from './App';
 import Teams from './routes/Teams';
 import Leaderboards from './routes/Leaderboards';
+import MoreLeaders from './routes/MoreLeaders';
 import reportWebVitals from './reportWebVitals';
-import { leaderboardLoader, teamsLoader, teamInfoLoader, playerInfoLoader } from './loaders';
+import { leaderTypesLoader, leaderboardLoader, teamsLoader, teamInfoLoader, playerInfoLoader } from './loaders';
 import TeamInfo from './routes/TeamInfo';
 import PlayerInfo from './routes/PlayerInfo';
 
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
         path: 'leaderboards',
         element: <Leaderboards />,
         loader: leaderboardLoader,
+      },
+      {
+        path: 'leaderboards/more',
+        element: <MoreLeaders />,
+        loader: leaderTypesLoader,
       },
       {
         path: 'teams/:teamId',
