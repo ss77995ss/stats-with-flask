@@ -4,8 +4,6 @@ export default function useSortStat() {
   const [targetStat, setTargetStat] = useState('');
   const [desc, setDesc] = useState(false);
 
-  console.log(targetStat);
-
   const handleOnSelectStat = (statName) => () => {
     if (targetStat === statName) {
       setDesc(!desc);

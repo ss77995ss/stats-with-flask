@@ -48,7 +48,7 @@ export default function PlayerInfo() {
 
 function Hitters({ playerInfo }) {
   const [sorted, handleOnSelectStat] = useSortStat();
-  console.log(playerInfo);
+
   return (
     <Table>
       <TableHeader>
