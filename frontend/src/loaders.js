@@ -11,10 +11,12 @@ export async function teamInfoLoader({ params }) {
 }
 
 export async function playerInfoLoader({ params }) {
-  const teamInfo = await fetch(`/api/team/${params.teamId}`).then((res) => res.json());
-  const playerInfo = await fetch(`/api/player/${params.playerId}`).then((res) => res.json());
+  const info = await Promise.all([
+    fetch(`/api/team/${params.teamId}`).then((res) => res.json()),
+    fetch(`/api/player/${params.playerId}`).then((res) => res.json()),
+  ]);
 
-  return { teamInfo, playerInfo };
+  return { teamInfo: info[0], playerInfo: info[1] };
 }
 
 export async function leaderTypesLoader() {
@@ -23,33 +25,36 @@ export async function leaderTypesLoader() {
   return { leaderTypes };
 }
 
-export async function leaderboardLoader() {
-  const avg = await fetch('/api/leaderboard/hitting/avg').then((res) => res.json());
-  const hr = await fetch('/api/leaderboard/hitting/homeRuns').then((res) => res.json());
-  const rbi = await fetch('/api/leaderboard/hitting/rbi').then((res) => res.json());
-  const hit = await fetch('/api/leaderboard/hitting/hits').then((res) => res.json());
-  const sb = await fetch('/api/leaderboard/hitting/stolenBases').then((res) => res.json());
+const getLeaders = (position, type) => fetch(`/api/leaderboard/${position}/${type}`).then((res) => res.json());
 
-  const win = await fetch('/api/leaderboard/pitching/wins').then((res) => res.json());
-  const era = await fetch('/api/leaderboard/pitching/era').then((res) => res.json());
-  const sv = await fetch('/api/leaderboard/pitching/saves').then((res) => res.json());
-  const so = await fetch('/api/leaderboard/pitching/strikeOuts').then((res) => res.json());
-  const hold = await fetch('/api/leaderboard/pitching/holds').then((res) => res.json());
+export async function leaderboardLoader() {
+  const leaders = await Promise.all([
+    getLeaders('hitting', 'avg'),
+    getLeaders('hitting', 'homeRuns'),
+    getLeaders('hitting', 'rbi'),
+    getLeaders('hitting', 'hits'),
+    getLeaders('hitting', 'stolenBases'),
+    getLeaders('pitching', 'wins'),
+    getLeaders('pitching', 'era'),
+    getLeaders('pitching', 'saves'),
+    getLeaders('pitching', 'strikeOuts'),
+    getLeaders('pitching', 'holds'),
+  ]);
 
   return {
     hitting: {
-      avg,
-      hr,
-      rbi,
-      hit,
-      sb,
+      avg: leaders[0],
+      hr: leaders[1],
+      rbi: leaders[2],
+      hit: leaders[3],
+      sb: leaders[4],
     },
     pitching: {
-      win,
-      era,
-      sv,
-      so,
-      hold,
+      win: leaders[5],
+      era: leaders[6],
+      sv: leaders[7],
+      so: leaders[8],
+      hold: leaders[9],
     },
   };
 }
