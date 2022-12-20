@@ -3,7 +3,7 @@ export default function News({ news }) {
     <div className="container my-4">
       <div className="row">
         {news.map((item, index) => (
-          <div className="col-3">
+          <div key={`news-${index}`} className="col-3">
             <div className="card text-black h-100">
               <img className="card-img-top" src={item.image['@href']} alt={`news-${index}`} />
               <div className="card-body">

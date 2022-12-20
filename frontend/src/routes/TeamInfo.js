@@ -131,8 +131,8 @@ function Hitters({ teamId, hitters }) {
         <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {sorted(resolvedHitters).map((stat) => (
-          <tr className="text-center" key={`standing-stats-${stat.id}`}>
+        {sorted(resolvedHitters).map((stat, index) => (
+          <tr className="text-center" key={`standing-stats-hitting-${index}`}>
             <td>{stat.position}</td>
             <td>{stat.jerseyNumber}</td>
             <td className="lg-cell">
@@ -188,8 +188,8 @@ function Pitchers({ teamId, pitchers }) {
         <TableHeaderSortCell onClick={handleOnSelectStat('ops')}>OPS</TableHeaderSortCell>
       </TableHeader>
       <TableBody>
-        {sorted(resolvedPitchers).map((stat) => (
-          <tr key={`standing-stats-${stat.id}`} className="text-center">
+        {sorted(resolvedPitchers).map((stat, index) => (
+          <tr key={`standing-stats-pitching-${index}`} className="text-center">
             <td>{stat.position}</td>
             <td>{stat.jerseyNumber}</td>
             <td className="lg-cell">
