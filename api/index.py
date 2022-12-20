@@ -32,7 +32,7 @@ team_url_map = {
     "119": "dodgers",
     "120": "nationals",
     "121": "mets",
-    "133": "ahletics",
+    "133": "athletics",
     "134": "pirates",
     "135": "padres",
     "136": "mariners",
@@ -45,6 +45,8 @@ team_url_map = {
     "143": "phillies",
     "144": "braves",
     "145": "whitesox",
+    "146": "marlins",
+    "147": "yankees",
     "141": "marlins",
     "142": "yankees",
     "158": "brewers"
